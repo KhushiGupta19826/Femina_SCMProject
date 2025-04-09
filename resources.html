@@ -6,183 +6,309 @@
   <title>Femina Resources</title>
   <style>
     /* Reset & Global Styles */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #ffe0ec;
-    color: #333;
-    line-height: 1.6;
-    padding: 20px;
-  }
-  
-  /* Header */
-  header {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  header h1 {
-    color: #ff4d94;
-  }
-  
-  /* Controls Section */
-  .controls {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  #searchInput {
-    width: 80%;
-    max-width: 400px;
-    padding: 10px;
-    border: 2px solid #ff4d94;
-    border-radius: 5px;
-    margin-bottom: 10px;
-  }
-  .filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .filter-btn {
-    background-color: #ff4d94;
-    color: #fff;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  .filter-btn.active,
-  .filter-btn:hover {
-    background-color: #e64387;
-  }
-  
-  /* Grid Layout */
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 15px;
-  }
-  
-  /* Resource Card */
-  .card {
-    background-color: #fff;
-    border: 2px solid #ff4d94;
-    border-radius: 10px;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
-    position: relative;
-    animation: fadeIn 0.5s;
-  }
-  .card:hover {
-    transform: scale(1.03);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  }
-  .card img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-  }
-  .card-content {
-    padding: 10px;
-  }
-  .card-content h3 {
-    margin-bottom: 5px;
-    color: #ff4d94;
-  }
-  .card-content p {
-    font-size: 0.9rem;
-  }
-  
-  /* Bookmark Button */
-  .bookmark-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: rgba(255, 77, 148, 0.8);
-    border: none;
-    color: #fff;
-    padding: 5px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-  }
-  .bookmark-btn:hover {
-    transform: scale(1.2);
-  }
-  
-  /* Bookmarks Section */
-  #bookmarks-section {
-    margin-top: 40px;
-  }
-  #bookmarks-section h2 {
-    margin-bottom: 15px;
-    text-align: center;
-    color: #ff4d94;
-  }
-  
-  /* Modal Styles */
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: fadeIn 0.5s;
-    z-index: 1000;
-  }
-  .modal.hidden {
-    display: none;
-  }
-  .modal-content {
-    background: #fff;
-    width: 90%;
-    max-width: 600px;
-    padding: 20px;
-    border-radius: 10px;
-    position: relative;
-    animation: zoomIn 0.3s;
-  }
-  .modal-content img {
-    width: 100%;
-    border-radius: 5px;
-    margin-bottom: 10px;
-  }
-  .close-button {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 28px;
-    color: #ff4d94;
-    cursor: pointer;
-  }
-  
-  /* Animations */
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  @keyframes zoomIn {
-    from { transform: scale(0.8); }
-    to { transform: scale(1); }
-  }
-  
-  /* Responsive */
-  @media (max-width: 768px) {
-    #searchInput {
-      width: 100%;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
-  }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #ffe0ec;
+      background-image: linear-gradient(135deg, #ffe0ec 0%, #fff2f8 100%);
+      color: #333;
+      line-height: 1.6;
+      padding: 20px;
+      min-height: 100vh;
+    }
+  
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px 0;
+    }
+    header h1 {
+      color: #ff4d94;
+      font-size: 2.5rem;
+      text-shadow: 2px 2px 4px rgba(255, 77, 148, 0.2);
+      letter-spacing: 1px;
+    }
+    header h1::after {
+      content: "";
+      display: block;
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(to right, transparent, #ff4d94, transparent);
+      margin: 10px auto;
+    }
+  
+    /* Controls Section */
+    .controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 30px;
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(255, 77, 148, 0.15);
+    }
+    #searchInput {
+      width: 80%;
+      max-width: 400px;
+      padding: 12px 15px;
+      border: 2px solid #ff4d94;
+      border-radius: 25px;
+      margin-bottom: 15px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) inset;
+    }
+    #searchInput:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 77, 148, 0.3);
+    }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+    .filter-btn {
+      background: linear-gradient(to bottom, #ff6ba7, #ff4d94);
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      min-width: 120px;
+      text-align: center;
+    }
+    .filter-btn.active {
+      background: linear-gradient(to bottom, #e64387, #d13470);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      transform: translateY(1px);
+    }
+    .filter-btn:hover {
+      background: linear-gradient(to bottom, #ff5c9a, #e64387);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+  
+    /* Section Headings */
+    main, #bookmarks-section {
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 25px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      box-shadow: 0 5px 15px rgba(255, 77, 148, 0.15);
+    }
+    #bookmarks-section h2 {
+      margin-bottom: 20px;
+      text-align: center;
+      color: #ff4d94;
+      font-size: 1.8rem;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    #bookmarks-section h2::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(to right, transparent, #ff4d94, transparent);
+    }
+  
+    /* Grid Layout */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+  
+    /* Resource Card */
+    .card {
+      background-color: #fff;
+      border: none;
+      border-radius: 15px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      animation: fadeIn 0.5s;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      height: 100%;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(255, 77, 148, 0.25);
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 5px;
+      height: 100%;
+      background: linear-gradient(to bottom, #ff6ba7, #ff4d94);
+    }
+    .card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+    .card-content {
+      padding: 20px;
+    }
+    .card-content h3 {
+      margin-bottom: 10px;
+      color: #ff4d94;
+      font-size: 1.3rem;
+    }
+    .card-content p {
+      font-size: 0.95rem;
+      color: #666;
+      line-height: 1.5;
+    }
+  
+    /* Bookmark Button */
+    .bookmark-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(255, 77, 148, 0.9);
+      border: none;
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    .bookmark-btn:hover {
+      transform: scale(1.2);
+      background: rgba(230, 67, 135, 1);
+    }
+  
+    /* Modal Styles */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.5s;
+      z-index: 1000;
+      backdrop-filter: blur(5px);
+    }
+    .modal.hidden {
+      display: none;
+    }
+    .modal-content {
+      background: #fff;
+      width: 90%;
+      max-width: 600px;
+      padding: 30px;
+      border-radius: 20px;
+      position: relative;
+      animation: zoomIn 0.3s;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    .modal-content h2 {
+      color: #ff4d94;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #ffe0ec;
+    }
+    .modal-content img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    .modal-content p {
+      line-height: 1.8;
+      color: #444;
+    }
+    .close-button {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 28px;
+      color: #ff4d94;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+    .close-button:hover {
+      background-color: rgba(255, 77, 148, 0.1);
+      transform: rotate(90deg);
+    }
+  
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 30px;
+      color: #999;
+    }
+  
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes zoomIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+  
+    /* Responsive */
+    @media (max-width: 768px) {
+      #searchInput {
+        width: 100%;
+      }
+      .grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      }
+      header h1 {
+        font-size: 2rem;
+      }
+      .filter-btn {
+        min-width: 100px;
+        padding: 8px 12px;
+      }
+    }
+    @media (max-width: 480px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .controls {
+        padding: 15px;
+      }
+      .filter-btn {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+      }
+    }
   </style>
 </head>
 <body>
