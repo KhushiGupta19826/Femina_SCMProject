@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Femina Resources</title>
+  <style>
+    /* Reset & Global Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #ffe0ec;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+  }
+  
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  header h1 {
+    color: #ff4d94;
+  }
+  
+  /* Controls Section */
+  .controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  #searchInput {
+    width: 80%;
+    max-width: 400px;
+    padding: 10px;
+    border: 2px solid #ff4d94;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .filter-btn {
+    background-color: #ff4d94;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .filter-btn.active,
+  .filter-btn:hover {
+    background-color: #e64387;
+  }
+  
+  /* Grid Layout */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+  }
+  
+  /* Resource Card */
+  .card {
+    background-color: #fff;
+    border: 2px solid #ff4d94;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    animation: fadeIn 0.5s;
+  }
+  .card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+  .card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+  }
+  .card-content {
+    padding: 10px;
+  }
+  .card-content h3 {
+    margin-bottom: 5px;
+    color: #ff4d94;
+  }
+  .card-content p {
+    font-size: 0.9rem;
+  }
+  
+  /* Bookmark Button */
+  .bookmark-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 77, 148, 0.8);
+    border: none;
+    color: #fff;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  .bookmark-btn:hover {
+    transform: scale(1.2);
+  }
+  
+  /* Bookmarks Section */
+  #bookmarks-section {
+    margin-top: 40px;
+  }
+  #bookmarks-section h2 {
+    margin-bottom: 15px;
+    text-align: center;
+    color: #ff4d94;
+  }
+  
+  /* Modal Styles */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.5s;
+    z-index: 1000;
+  }
+  .modal.hidden {
+    display: none;
+  }
+  .modal-content {
+    background: #fff;
+    width: 90%;
+    max-width: 600px;
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+    animation: zoomIn 0.3s;
+  }
+  .modal-content img {
+    width: 100%;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 28px;
+    color: #ff4d94;
+    cursor: pointer;
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes zoomIn {
+    from { transform: scale(0.8); }
+    to { transform: scale(1); }
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    #searchInput {
+      width: 100%;
+    }
+  }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Femina Resources</h1>
+  </header>
+  
+  <section class="controls">
+    <input type="text" id="searchInput" placeholder="Search resources...">
+    <div class="filters">
+      <button class="filter-btn active" data-category="All">All</button>
+      <button class="filter-btn" data-category="Menstrual Health">Menstrual Health</button>
+      <button class="filter-btn" data-category="Fitness">Fitness</button>
+      <button class="filter-btn" data-category="Mental Wellness">Mental Wellness</button>
+      <button class="filter-btn" data-category="Nutrition">Nutrition</button>
+    </div>
+  </section>
+  
+  <main>
+    <div id="resource-grid" class="grid"></div>
+  </main>
+  
+  <section id="bookmarks-section">
+    <h2>Bookmarked Resources</h2>
+    <div id="bookmark-grid" class="grid"></div>
+  </section>
+  
+  <!-- Modal for detailed view -->
+  <div id="resource-modal" class="modal hidden">
+    <div class="modal-content">
+      <span id="closeModal" class="close-button">&times;</span>
+      <h2 id="modalTitle"></h2>
+      <p id="modalDetails"></p>
+    </div>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    let resourcesData = [];
+    let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+  
+    const resourceGrid = document.getElementById('resource-grid');
+    const bookmarkGrid = document.getElementById('bookmark-grid');
+    const searchInput = document.getElementById('searchInput');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const modal = document.getElementById('resource-modal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDetails = document.getElementById('modalDetails');
+    const closeModal = document.getElementById('closeModal');
+  
+    // Fetch resources from JSON file
+    fetch('resources.json')
+      .then(response => response.json())
+      .then(data => {
+        resourcesData = data;
+        displayResources(resourcesData);
+        updateBookmarks();
+      })
+      .catch(error => console.error('Error fetching resources:', error));
+  
+    // Function to display resources in the grid
+    function displayResources(data) {
+      resourceGrid.innerHTML = '';
+      data.forEach(resource => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-content">
+            <h3>${resource.title}</h3>
+            <p>${resource.description}</p>
+          </div>
+          <button class="bookmark-btn" data-id="${resource.id}">${bookmarks.includes(resource.id) ? '★' : '☆'}</button>
+        `;
+        // Open modal on card click (unless bookmark button is clicked)
+        card.addEventListener('click', (e) => {
+          if (e.target.classList.contains('bookmark-btn')) return;
+          openModal(resource);
+        });
+        // Toggle bookmark on bookmark button click
+        card.querySelector('.bookmark-btn').addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleBookmark(resource.id);
+          e.target.textContent = bookmarks.includes(resource.id) ? '★' : '☆';
+          updateBookmarks();
+        });
+        resourceGrid.appendChild(card);
+      });
+    }
+  
+    // Open modal with detailed view
+    function openModal(resource) {
+      modalTitle.textContent = resource.title;
+      modalDetails.textContent = resource.details;
+      modal.classList.remove('hidden');
+    }
+  
+    // Close modal
+    closeModal.addEventListener('click', () => {
+      modal.classList.add('hidden');
+    });
+  
+    // Filter resources based on search and selected category
+    function filterResources() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const activeCategory = document.querySelector('.filter-btn.active')?.dataset.category || 'All';
+      
+      const filtered = resourcesData.filter(resource => {
+        const matchesSearch = resource.title.toLowerCase().includes(searchTerm) || resource.description.toLowerCase().includes(searchTerm);
+        const matchesCategory = activeCategory === 'All' || resource.category === activeCategory;
+        return matchesSearch && matchesCategory;
+      });
+      displayResources(filtered);
+    }
+  
+    // Event listener for search input
+    searchInput.addEventListener('input', filterResources);
+  
+    // Event listeners for category filter buttons
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        filterResources();
+      });
+    });
+  
+    // Toggle bookmark in localStorage
+    function toggleBookmark(id) {
+      if (bookmarks.includes(id)) {
+        bookmarks = bookmarks.filter(b => b !== id);
+      } else {
+        bookmarks.push(id);
+      }
+      localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+    }
+  
+    // Update the bookmarks section
+    function updateBookmarks() {
+      bookmarkGrid.innerHTML = '';
+      const bookmarkedResources = resourcesData.filter(resource => bookmarks.includes(resource.id));
+      bookmarkedResources.forEach(resource => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-content">
+            <h3>${resource.title}</h3>
+            <p>${resource.description}</p>
+          </div>
+        `;
+        card.addEventListener('click', () => {
+          openModal(resource);
+        });
+        bookmarkGrid.appendChild(card);
+      });
+    }
+  });
+  </script>
+</body>
+</html>
